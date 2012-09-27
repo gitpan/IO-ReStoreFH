@@ -15,4 +15,6 @@ test_requires 'Test::File::Contents', 0.20;
 author_requires 'Test::NoBreakpoints';
 auto_install;
 
+requires 'Try::Tiny';
+
 WriteAll;

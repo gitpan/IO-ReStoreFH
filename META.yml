@@ -22,7 +22,8 @@ no_index:
     - t
     - xt
 requires:
+  Try::Tiny: 0
   perl: 5.10.0
 resources:
   license: http://opensource.org/licenses/gpl-3.0.html
-version: 0.002000
+version: 0.002_001
