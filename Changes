@@ -1,5 +1,19 @@
 Revision history for IO-ReStoreFH
 
+v0.02_02 Thu Sep 27 17:35:02 EDT 2012
+
+
+[BUILD]
+
+* add Test::Exception test requirement
+
+
+v0.02_01 Thu Sep 27 13:30:01 EDT 2012
+
+[BUILD]
+
+* add Try::Tiny requirement
+
 v0.02  Thu Sep 27 09:49:33 EDT 2012
 
 [MISC]
