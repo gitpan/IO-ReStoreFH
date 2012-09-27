@@ -26,7 +26,7 @@ use 5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = qv("v0.01");
+use version 0.77; our $VERSION = qv("v0.02");
 
 use Fcntl qw[ F_GETFL O_RDONLY O_WRONLY O_RDWR O_APPEND ];
 use POSIX qw[ dup dup2 ceil floor ];

@@ -25,4 +25,4 @@ requires:
   perl: 5.10.0
 resources:
   license: http://opensource.org/licenses/gpl-3.0.html
-version: 0.001000
+version: 0.002000
