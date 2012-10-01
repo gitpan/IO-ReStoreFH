@@ -49,7 +49,7 @@ throws_ok {
 throws_ok { 
             IO::ReStoreFH->new( MyTest->new );
 
-} qr/unable to determine mode/, 'defined fileno';
+} qr/not a GLOB/i, 'defined fileno';
 
 
 done_testing;

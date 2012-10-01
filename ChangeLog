@@ -1,0 +1,38 @@
+2012-10-01 12:09 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (93cddfbdb643 [tip])
+
+	* MANIFEST.SKIP:
+	ignore emacs backup/lock files
+
+2012-10-01 12:08 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (30c8cc2bf106)
+
+	* Makefile.PL:
+	Module::Install uses CPAN::Meta::Spec v 1.4; use appropriate license
+	string for that version
+
+2012-10-01 11:40 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (1ae0093c26ae)
+
+	* Makefile.PL, lib/IO/ReStoreFH.pm, t/iface.t, t/std.t:
+	use FileHandle::Fmode instead of fcntl and matching heuristics to
+	get access modes on filehandles
+
+2012-09-27 17:36 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (c703f6c8ebd2)
+
+	* Makefile.PL:
+	forgot test require for Test::Exception
+
+2012-09-27 13:30 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (605c6cf47bb9)
+
+	* Makefile.PL:
+	forgot requirement for Try::Tiny
+
+2012-09-27 09:53 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (ca5d2856e562)
+
+	* Changes, MANIFEST.SKIP, Makefile.PL, README, lib/IO/ReStoreFH.pm,
+	t/00-load.t, t/fd.t, t/iface.t, t/std.t, t/test.pm,
+	xt/nobreakpoints.t, xt/perlcritic.t, xt/pod-coverage.t, xt/pod.t:
+	new file.
+	* Changes, MANIFEST.SKIP, Makefile.PL, README, lib/IO/ReStoreFH.pm,
+	t/00-load.t, t/fd.t, t/iface.t, t/std.t, t/test.pm,
+	xt/nobreakpoints.t, xt/perlcritic.t, xt/pod-coverage.t, xt/pod.t:
+	initial import
+

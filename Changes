@@ -1,5 +1,12 @@
 Revision history for IO-ReStoreFH
 
+v0.02_03 Mon Oct  1 11:38:27 EDT 2012
+
+[BUG FIX]
+
+* use FileHandle::Fmode to determine access mode for filehandles instead
+  of fcntl (and thus hopefully work on Windows)
+
 v0.02_02 Thu Sep 27 17:35:02 EDT 2012
 
 

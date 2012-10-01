@@ -1,10 +1,5 @@
 #!perl
 
-BEGIN {
-      *CORE::GLOBAL::fcntl = sub { die; }
-}
-
-
 use IO::ReStoreFH;
 
 use IO::Handle;
@@ -13,8 +8,6 @@ use Test::More;
 use Test::File::Contents;
 
 use File::Temp;
-
-# redirect STDOUT & STDERR, forcing failure in fcntl
 
 for my $fh ( *STDOUT, *STDERR ) {
 

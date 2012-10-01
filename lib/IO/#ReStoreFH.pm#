@@ -34,6 +34,7 @@ use POSIX qw[ dup dup2 ceil floor ];
 use Symbol;
 use Carp;
 
+use IO::Handle;
 use Scalar::Util qw[ looks_like_number ];
 use Try::Tiny;
 
