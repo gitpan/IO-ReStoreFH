@@ -26,7 +26,7 @@ use 5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = qv("v0.02_03");
+use version 0.77; our $VERSION = qv("v0.02_04");
 
 use FileHandle::Fmode ':all';
 
@@ -34,6 +34,7 @@ use POSIX qw[ dup dup2 ceil floor ];
 use Symbol;
 use Carp;
 
+use IO::Handle;
 use Scalar::Util qw[ looks_like_number ];
 use Try::Tiny;
 
@@ -69,7 +70,7 @@ sub store {
 
         $fd = eval { $fh->fileno };
 
-        croak( "\$fh object does not have a fileno method\n" )
+        croak( "\$fh object does not have a fileno method:$@ \n" )
           if $@;
 
         croak( "\$fh is not open\n" )
@@ -81,7 +82,7 @@ sub store {
         # try fcntl and look at the underlying fileno
         if ( !defined $mode ) {
 
-	        my $rfh = 'GLOB' eq ref( \$fh ) ? \$fh : $fh;
+            my $rfh = 'GLOB' eq ref( \$fh ) ? \$fh : $fh;
 
             $mode
               = is_RO( $rfh )                ? '<'

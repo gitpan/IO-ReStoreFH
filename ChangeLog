@@ -1,4 +1,10 @@
-2012-10-01 12:09 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (93cddfbdb643 [tip])
+2012-10-01 20:20 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (fdff52ed47c9 [tip])
+
+	* lib/IO/ReStoreFH.pm:
+	fix accidental deletion of load of IO::Handle; add more info to
+	croak line
+
+2012-10-01 12:09 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (93cddfbdb643)
 
 	* MANIFEST.SKIP:
 	ignore emacs backup/lock files
