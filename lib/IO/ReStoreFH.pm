@@ -26,7 +26,7 @@ use 5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = qv("v0.02_04");
+use version 0.77; our $VERSION = qv( "v0.02_05" );
 
 use FileHandle::Fmode ':all';
 
@@ -41,16 +41,16 @@ use Try::Tiny;
 
 sub new {
 
-	my $class = shift;
+    my $class = shift;
 
-	my $obj = bless { dups => [] }, $class;
+    my $obj = bless { dups => [] }, $class;
 
-	for my $fh ( @_ ) {
+    for my $fh ( @_ ) {
 
-		$obj->store( 'ARRAY' eq ref $fh ? @{$fh} : $fh );
-	}
+        $obj->store( 'ARRAY' eq ref $fh ? @{$fh} : $fh );
+    }
 
-	return $obj;
+    return $obj;
 
 }
 
@@ -62,13 +62,22 @@ sub store {
 
     my ( $self, $fh, $mode ) = @_;
 
-    my $fh_is_fd = 0;
-
-    my $fd;
-
+    # may be passed glob or ref to glob
     if ( ref( $fh ) || 'GLOB' eq ref( \$fh ) ) {
 
-        $fd = eval { $fh->fileno };
+        # gimme a glob...
+        my $glob
+          = 'GLOB' eq ref( $fh )  ? ${$fh}
+          : 'GLOB' eq ref( \$fh ) ? $fh
+          :                         undef;
+
+        # open on Perl 5.10.x seems to return FileHandle objects,
+        # and that requires loading the package before it can
+        # find its fileno method.  weird.
+        require FileHandle
+          if defined $glob && *{$glob}{IO}->isa( 'FileHandle' );
+
+        my $fd = eval { $fh->fileno };
 
         croak( "\$fh object does not have a fileno method:$@ \n" )
           if $@;
@@ -78,15 +87,13 @@ sub store {
 
         # get access mode; open documentation says mode must
         # match that of original filehandle; do the best we can
-
-        # try fcntl and look at the underlying fileno
         if ( !defined $mode ) {
 
             my $rfh = 'GLOB' eq ref( \$fh ) ? \$fh : $fh;
 
             $mode
-              = is_RO( $rfh )                ? '<'
-              : is_WO( $rfh )                ? '>'
+              = is_RO( $rfh ) ? '<'
+              : is_WO( $rfh ) ? '>'
               : is_W( $rfh ) && is_R( $rfh ) ? '+<'
               :                                undef;
 
@@ -167,9 +174,9 @@ sub DESTROY {
     my $self = shift;
 
     try {
-	    $self->restore;
+        $self->restore;
     }
-      catch { croak $_ };
+    catch { croak $_ };
 
     return;
 }

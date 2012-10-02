@@ -1,5 +1,18 @@
 Revision history for IO-ReStoreFH
 
+v0.02_05 Tue Oct  2 15:33:43 EDT 2012
+
+[BUG FIX]
+
+* fix on Perl 5.10.x, hopefully; see ChangeLog for details
+
+v0.02_04 Mon Oct  1 20:24:26 EDT 2012
+
+[BUG FIX]
+
+* restore accidently deleted code loading IO::Handle; hopefully fixes
+  CPAN Testers failures on some early 5.10.x builds
+
 v0.02_03 Mon Oct  1 11:38:27 EDT 2012
 
 [BUG FIX]

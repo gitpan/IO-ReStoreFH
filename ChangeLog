@@ -1,4 +1,13 @@
-2012-10-01 20:20 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (fdff52ed47c9 [tip])
+2012-10-02 15:40 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (ff979daab1e9 [tip])
+
+	* lib/IO/ReStoreFH.pm:
+	finally (!?) fix for older 5.10.x Perls
+
+	On older version of Perl whose open() functions return FileHandles,
+	it seems that an explicit import of the FileHandle package is
+	required to gain access to the object's methods. So, we do that.
+
+2012-10-01 20:20 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (fdff52ed47c9)
 
 	* lib/IO/ReStoreFH.pm:
 	fix accidental deletion of load of IO::Handle; add more info to
