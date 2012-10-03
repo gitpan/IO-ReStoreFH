@@ -9,7 +9,7 @@ use Test::File::Contents;
 
 use File::Temp;
 
-for my $fh ( *STDOUT, *STDERR ) {
+for my $fh ( \*STDOUT, *STDERR ) {
 
     my $tmp = File::Temp->new;
 

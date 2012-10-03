@@ -1,4 +1,15 @@
-2012-10-02 15:40 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (ff979daab1e9 [tip])
+2012-10-03 12:25 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (b5cc47611004 [tip])
+
+	* lib/IO/ReStoreFH.pm, t/iface.t, t/std.t:
+	simplify internal logic; use FileHandle::Fname::is_FH to test for
+	filehandle
+
+	* API change; no longer can pass in mode. If it can't be determined
+	internally, it's hopeless.
+
+	* fix up docs
+
+2012-10-02 15:40 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (ff979daab1e9)
 
 	* lib/IO/ReStoreFH.pm:
 	finally (!?) fix for older 5.10.x Perls

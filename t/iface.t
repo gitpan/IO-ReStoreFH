@@ -8,16 +8,13 @@ use Test::Exception;
 
 use t::test;
 
-test_wfh 'new: [ fh, mode ]', '>',
-         sub { IO::ReStoreFH->new( [ $_[0], '>' ] ) };
-
-test_wfh 'new: fh', '>',
+test_wfh 'new: fh >', '>',
          sub { IO::ReStoreFH->new( $_[0] ) };
 
-test_wfh 'new: fh', '>>',
+test_wfh 'new: fh >>', '>>',
          sub { IO::ReStoreFH->new( $_[0] ) };
 
-test_wfh 'new: fh', '+>',
+test_wfh 'new: fh +>', '+>',
          sub { IO::ReStoreFH->new( $_[0] ) };
 
 
@@ -31,13 +28,13 @@ throws_ok {
 
  IO::ReStoreFH->new( bless {} );
 
-} qr/does not have/, 'no fileno method';
+} qr/not an open filehandle/, 'no fileno method';
 
 throws_ok {
 
  IO::ReStoreFH->new( IO::Handle->new );
 
-} qr/is not open/, 'undefined fileno';
+} qr/not an open filehandle/, 'undefined fileno';
 
 # try and make fcntl fail to test rest of mode setting code
 {
@@ -49,7 +46,7 @@ throws_ok {
 throws_ok { 
             IO::ReStoreFH->new( MyTest->new );
 
-} qr/not a GLOB/i, 'defined fileno';
+} qr/not an open filehandle/i, 'defined fileno';
 
 
 done_testing;

@@ -26,7 +26,7 @@ use 5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = qv( "v0.02_05" );
+use version 0.77; our $VERSION = qv( "v0.02_06" );
 
 use FileHandle::Fmode ':all';
 
@@ -41,144 +41,132 @@ use Try::Tiny;
 
 sub new {
 
-    my $class = shift;
+	my $class = shift;
 
-    my $obj = bless { dups => [] }, $class;
+	my $obj = bless { dups => [] }, $class;
 
-    for my $fh ( @_ ) {
+	$obj->store( $_ ) for @_;
 
-        $obj->store( 'ARRAY' eq ref $fh ? @{$fh} : $fh );
-    }
-
-    return $obj;
+	return $obj;
 
 }
 
-# store (dup) a filehandle or file descriptors
-
-# use Perl's open to dup filehandles; POSIX dup to handle fd's
-
 sub store {
 
-    my ( $self, $fh, $mode ) = @_;
+	my ( $self, $fh ) = @_;
 
-    # may be passed glob or ref to glob
-    if ( ref( $fh ) || 'GLOB' eq ref( \$fh ) ) {
+	# if $fh is a reference, or a GLOB, it's probably
+	# a filehandle object of somesort
 
-        # gimme a glob...
-        my $glob
-          = 'GLOB' eq ref( $fh )  ? ${$fh}
-          : 'GLOB' eq ref( \$fh ) ? $fh
-          :                         undef;
+	if ( ref( $fh ) || 'GLOB' eq ref( \$fh ) ) {
 
-        # open on Perl 5.10.x seems to return FileHandle objects,
-        # and that requires loading the package before it can
-        # find its fileno method.  weird.
-        require FileHandle
-          if defined $glob && *{$glob}{IO}->isa( 'FileHandle' );
+		# open() on Perl 5.10.x seems to return FileHandle objects,
+		# and that requires loading the package before it can find its
+		# fileno method.  Skinner box experimentation leads to
+		# the following code to check for that:
 
-        my $fd = eval { $fh->fileno };
+		# need a glob
+		my $glob = 'GLOB' eq ref( $fh ) ? ${$fh} : undef;
+		require FileHandle
+		  if defined $glob && *{$glob}{IO}->isa( 'FileHandle' );
 
-        croak( "\$fh object does not have a fileno method:$@ \n" )
-          if $@;
+		# now that we are sure that everything is loaded,
+		# check if it is an open filehandle; this doesn't disambiguate
+		# between objects that aren't filehandles or closed filehandles.
 
-        croak( "\$fh is not open\n" )
-          unless defined $fd;
+		# FileHandle::Fname::is_FH (v0.11) alters global $_, which is
+		# not good
+		croak( "\$fh is not an open filehandle\n" )
+		  unless do{ local $_; is_FH( $fh ) };
 
-        # get access mode; open documentation says mode must
-        # match that of original filehandle; do the best we can
-        if ( !defined $mode ) {
-
-            my $rfh = 'GLOB' eq ref( \$fh ) ? \$fh : $fh;
-
-            $mode
-              = is_RO( $rfh ) ? '<'
-              : is_WO( $rfh ) ? '>'
-              : is_W( $rfh ) && is_R( $rfh ) ? '+<'
-              :                                undef;
-
-            $mode .= '>' if is_A( $fh );
-
-        }
-
-        # give up
-        croak(
-            "unable to determine mode for $fh; please pass it as an argument\n"
-        ) if !defined $mode;
+		# get access mode; open documentation says mode must
+		# match that of original filehandle; do the best we can
+		my $mode
+		  = is_RO( $fh )                ? '<'
+		  : is_WO( $fh )                ? '>'
+		  : is_W( $fh ) && is_R( $fh )  ? '+<'
+		  :                                undef;
 
 
-        # dup the filehandle
-        open my $dup, $mode . '&', $fh
-          or croak( "error fdopening $fh: $!\n" );
+		# give up
+		croak(
+			"inexplicable error: unable to determine mode for \$fh;\n"
+		) if !defined $mode;
 
-        push @{ $self->{dups} }, { fh => $fh, mode => $mode, dup => $dup };
+		$mode .= '>' if is_A( $fh );
 
-    }
+		# dup the filehandle
+		open my $dup, $mode . '&', $fh
+		  or croak( "error fdopening \$fh: $!\n" );
 
-    elsif ( looks_like_number( $fh ) && ceil( $fh ) == floor( $fh ) ) {
+		push @{ $self->{dups} }, { fh => $fh, mode => $mode, dup => $dup };
 
-        # as the caller specifically used an fd, don't go through Perl's
-        # IO system
-        my $dup = dup( $fh )
-          or croak( "error dup'ing file descriptor $fh: $!\n" );
+	}
 
-        push @{ $self->{dups} }, { fd => $fh, dup => $dup };
-    }
+	elsif ( looks_like_number( $fh ) && ceil( $fh ) == floor( $fh ) ) {
 
-    else {
+		# as the caller specifically used an fd, don't go through Perl's
+		# IO system
+		my $dup = dup( $fh )
+		  or croak( "error dup'ing file descriptor $fh: $!\n" );
 
-        croak(
-            "\$fh must be opened Perl filehandle or object or integer file descriptor\n"
-          )
+		push @{ $self->{dups} }, { fd => $fh, dup => $dup };
+	}
 
-    }
+	else {
 
-    return;
+		croak(
+			"\$fh must be opened Perl filehandle or object or integer file descriptor\n"
+		  )
+
+	}
+
+	return;
 }
 
 sub restore {
 
-    my $self = shift;
+	my $self = shift;
 
-    my $dups = $self->{dups};
-    ## no critic (ProhibitAccessOfPrivateData)
-    while ( my $dup = pop @{$dups} ) {
+	my $dups = $self->{dups};
+	## no critic (ProhibitAccessOfPrivateData)
+	while ( my $dup = pop @{$dups} ) {
 
-        if ( exists $dup->{fd} ) {
+		if ( exists $dup->{fd} ) {
 
-            dup2( $dup->{dup}, $dup->{fd} )
-              or croak( "error restoring file descriptor $dup->{fd}: $!\n" );
+			dup2( $dup->{dup}, $dup->{fd} )
+			  or croak( "error restoring file descriptor $dup->{fd}: $!\n" );
 
-            POSIX::close( $dup->{dup} );
+			POSIX::close( $dup->{dup} );
 
-        }
+		}
 
-        else {
+		else {
 
-            open( $dup->{fh}, $dup->{mode} . '&', $dup->{dup} )
-              or croak( "error restoring file handle $dup->{fh}: $!\n" );
+			open( $dup->{fh}, $dup->{mode} . '&', $dup->{dup} )
+			  or croak( "error restoring file handle $dup->{fh}: $!\n" );
 
-            close( $dup->{dup} );
+			close( $dup->{dup} );
 
-        }
+		}
 
-    }
+	}
 
-    return;
+	return;
 }
 
 
 
 sub DESTROY {
 
-    my $self = shift;
+	my $self = shift;
 
-    try {
-        $self->restore;
-    }
-    catch { croak $_ };
+	try {
+		$self->restore;
+	}
+	catch { croak $_ };
 
-    return;
+	return;
 }
 
 __END__
@@ -190,23 +178,23 @@ IO::ReStoreFH - store/restore file handles
 
 =head1 SYNOPSIS
 
-    use IO::ReStoreFH;
+	use IO::ReStoreFH;
 
-    {
-       my $fhstore = IO::ReStoreFH->new( *STDOUT );
+	{
+	   my $fhstore = IO::ReStoreFH->new( *STDOUT );
 
-       open( STDOUT, '>', 'file' );
-    } # STDOUT will be restored when $fhstore is destroyed
+	   open( STDOUT, '>', 'file' );
+	} # STDOUT will be restored when $fhstore is destroyed
 
-    # or, one at-a-time
-    {
-       my $fhstore = IO::ReStoreFH->new;
-       $store->store( *STDOUT );
-       $store->store( $myfh );
+	# or, one at-a-time
+	{
+	   my $fhstore = IO::ReStoreFH->new;
+	   $store->store( *STDOUT );
+	   $store->store( $myfh );
 
-       open( STDOUT, '>', 'file' );
-       open( $myfh, '>', 'another file' );
-    } # STDOUT and $myfh will be restored when $fhstore is destroyed
+	   open( STDOUT, '>', 'file' );
+	   open( $myfh, '>', 'another file' );
+	} # STDOUT and $myfh will be restored when $fhstore is destroyed
 
 
 
@@ -218,8 +206,7 @@ STDOUT or STDERR.
 
 B<IO::ReStoreFH> helps keep track of the present state of filehandles and
 low-level file descriptors and restores them either explicitly or when
-the B<IO::ReStoreFH> object goes out of scope.  It B<only> works with
-filehandles for which B<fileno()> returns a defined value.
+the B<IO::ReStoreFH> object goes out of scope.
 
 It uses the standard Perl filehandle duplication methods (via B<open>)
 for filehandles, and uses B<POSIX::dup> and B<POSIX::dup2> for file
@@ -234,29 +221,23 @@ they are stored.
 
 =item new
 
-    my $fhstore = IO::ReStoreFH->new;
-    my $fhstore = IO::ReStoreFH->new( $fh1, [ $fh2, $mode ], $fd, ... );
+	my $fhstore = IO::ReStoreFH->new;
+	my $fhstore = IO::ReStoreFH->new( $fh1, $fh2, $fd, ... );
 
-Create a new object.  Optionally pass a list of Perl filehandles,
-integer file descriptors, or filehandle - B<open()> file mode pairs.
-The latter is typically only necessary if B<fcntl()> does not return
-access mode flags for filehandles.
+Create a new object and an optional list of Perl filehandles or
+integer file descriptors.
 
 The passed handles and descriptors will be duplicated to be restored
 when the object is destroyed or the B<restore> method is called.
 
 =item store
 
-    $fhstore->store( $fh );
-    $fhstore->store( $fh, $mode );
+	$fhstore->store( $fh );
 
-    $fhstore->store( $fd );
+	$fhstore->store( $fd );
 
 The passed handles and descriptors will be duplicated to be restored
 when the object is destroyed or the B<restore> method is called.
-C<$mode> is optional; and only necessary if the platform's B<fcntl>
-does not provide access mode flags.
-
 
 =item restore
 
@@ -273,28 +254,22 @@ is destroyed.
 =head1 DIAGNOSTICS
 
 =for author to fill in:
-    List every single error and warning message that the module can
-    generate (even the ones that will "never happen"), with a full
-    explanation of each problem, one or more likely causes, and any
-    suggested remedies.
+	List every single error and warning message that the module can
+	generate (even the ones that will "never happen"), with a full
+	explanation of each problem, one or more likely causes, and any
+	suggested remedies.
 
 =over
 
-=item C<< $fh object does not have a fileno method >>
+=item C<< $fh is not an open filehandle >>
 
-Objects passed to B<IO::ReStoreFH> must provide a fileno method.  They
-really need to be file handles.
+The passed filehandle failed a check to ensure that it was an open
+filehandle.  Make sure it's a) a real filehandle; b) it's open.
 
-=item C<< $fh is not open >>
+=item C<< inexplicable error: unable to determine mode for \$fh >>
 
-The passed file handle was not attached to a file descriptor.
-
-=item C<< unable to determine mode for %s; please pass it as an argument >>
-
-B<IO::ReStoreFH> was unable to get the access mode for the passed file handle
-using B<fcntl> or a match against file descriptors 0, 1, or 2.  You
-will need to explicitly provide the Perl access mode used to create
-the file handle.
+B<IO::ReStoreFH> was unable to get the access mode for the passed file
+handle.  Are you sure that it's really a filehandle object?
 
 =item C<< error fdopening %s: %s >>
 
@@ -308,7 +283,7 @@ specified reason.
 
 =item C<< $fh must be opened Perl filehandle or object or integer file descriptor >>
 
-The passed C<fh> argument wasn't recognized as a Perl filehandle or a
+The passed C<$fh> argument wasn't recognized as a Perl filehandle or a
 file descriptor.  Please try again.
 
 =item C<< error restoring file descriptor %d: %s >>
@@ -321,15 +296,14 @@ Attempting to restore the Perl file handle failed for the specified reason.
 
 =back
 
-
 =head1 CONFIGURATION AND ENVIRONMENT
 
-IO::ReStoreFH requires no configuration files or environment variables.
+B<IO::ReStoreFH> requires no configuration files or environment variables.
 
 
 =head1 DEPENDENCIES
 
-Try::Tiny.
+B<L<Try::Tiny>>, B<L<FileHandle::Fmode>>.
 
 =head1 INCOMPATIBILITIES
 
@@ -338,10 +312,10 @@ None reported.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.  This code has been tested on Linux and Mac OS X.
+No bugs have been reported.
 
 Please report any bugs or feature requests to
-C<bug-io-redir@rt.cpan.org>, or through the web interface at
+C<bug-io-restorefh@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/Public/Dist/Display.html?Name=IO-ReStoreFH>.
 
 
@@ -365,5 +339,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 =head1 AUTHOR
 
 Diab Jerius  E<lt>djerius@cpan.orgE<gt>
-
-
