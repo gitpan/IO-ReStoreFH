@@ -1,4 +1,21 @@
-2012-10-03 12:25 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (b5cc47611004 [tip])
+2012-10-04 14:43 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (d4715a8b0ac4 [tip])
+
+	* lib/IO/ReStoreFH.pm:
+	minor typo fix
+
+2012-10-03 12:26 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (34282ed60f11)
+
+	* .hgtags: new file.
+	* .hgtags:
+	Added tag 0.02_06 for changeset 231ee71787d2
+
+2012-10-03 12:26 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (231ee71787d2 [0.02_06])
+
+	* ChangeLog: new file.
+	* ChangeLog, Changes:
+	update logs and version for release
+
+2012-10-03 12:25 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (b5cc47611004)
 
 	* lib/IO/ReStoreFH.pm, t/iface.t, t/std.t:
 	simplify internal logic; use FileHandle::Fname::is_FH to test for
