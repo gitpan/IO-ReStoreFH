@@ -265,7 +265,7 @@ EOT
 	}
 	if ( $self->makemaker(6.10) ) {
 		$args->{NO_META}   = 1;
-		$args->{NO_MYMETA} = 1;
+		#$args->{NO_MYMETA} = 1;
 	}
 	if ( $self->makemaker(6.17) and $self->sign ) {
 		$args->{SIGN} = 1;

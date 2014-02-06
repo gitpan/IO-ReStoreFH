@@ -1,4 +1,57 @@
-2012-10-04 14:43 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (d4715a8b0ac4 [tip])
+2014-02-06 17:42 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (0932da3f2b2a [tip])
+
+	* .hgtags:
+	Added tag 0.03_01 for changeset d523bb96f2a2
+
+2014-02-06 17:42 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (d523bb96f2a2 [0.03_01])
+
+	* Changes, lib/IO/ReStoreFH.pm:
+	update logs and version for release
+
+2014-02-06 17:39 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (c7dd32f4ac46)
+
+	* ChangeLog: deleted file.
+	* ChangeLog:
+	don't track ChangeLog; it is a derived product
+
+2014-02-06 17:37 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (66b3440e7b20)
+
+	* Makefile.PL:
+	add repo and bugtracker metadata
+
+2014-02-06 17:37 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (ba634df1e0ec)
+
+	* Makefile.PL, lib/IO/ReStoreFH.pm:
+	newer version of FileHandle::Fmode fixes non-localized $_; remove
+	workaround and require it
+
+2014-02-06 17:27 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (f89e7a93bace)
+
+	* lib/IO/ReStoreFH.pm:
+	fix Perl 5.10.1 problem with loading FileHandle; see
+	http://perlmonks.org/?node_id=1073753
+
+2014-02-06 16:06 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (b06a3c35d0f8)
+
+	* Makefile.PL, README:
+	fixup license text and name; no actual change in license
+
+2014-02-06 16:04 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (3a9894ef907e)
+
+	* Makefile.PL:
+	require minimum version of Test::More
+
+2012-10-04 18:09 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (560798791835)
+
+	* .hgtags:
+	Added tag 0.03 for changeset f9f844a511ac
+
+2012-10-04 18:09 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (f9f844a511ac [0.03])
+
+	* ChangeLog, Changes, lib/IO/ReStoreFH.pm:
+	update logs and version for release
+
+2012-10-04 14:43 -0400  Diab Jerius  <djerius@cfa.harvard.edu>  (d4715a8b0ac4)
 
 	* lib/IO/ReStoreFH.pm:
 	minor typo fix
