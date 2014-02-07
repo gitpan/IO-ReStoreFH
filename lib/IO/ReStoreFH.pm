@@ -26,7 +26,7 @@ use 5.10.0;
 use strict;
 use warnings;
 
-use version 0.77; our $VERSION = '0.03_02';
+use version 0.77; our $VERSION = '0.03_03';
 
 # In Perl 5.10.1 a use or require of FileHandle or something in the
 # FileHandle hierarchy (like FileHandle::Fmode, below) will cause the

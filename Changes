@@ -1,5 +1,10 @@
 Revision history for IO-ReStoreFH
 
+0.03_03 2014-02-07T12:09:58-0500
+
+  [TEST FIX FIX]
+    * test for breakage under 5.10.x missed 5.10.0
+
 0.03_02	2014-02-07T09:21:05-0500
 
   [TEST FIX]

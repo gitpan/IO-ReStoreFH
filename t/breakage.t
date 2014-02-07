@@ -7,8 +7,8 @@ use IO::ReStoreFH;
 
 use File::Temp qw[ tempfile ];
 
-plan 'skip_all', 'only relevant to 5.10.1'
-    if $^V le v5.10.0 || $^V ge 5.11.0;
+plan 'skip_all', 'only relevant to 5.10.x'
+    if $^V lt v5.10.0 || $^V ge 5.11.0;
 
 my ( $fh, $fname ) = tempfile;
 

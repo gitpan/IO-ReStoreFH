@@ -1,4 +1,24 @@
-2014-02-07 09:22 -0500  djerius  <djerius@cfa.harvard.edu>  (f1a12053529f [tip])
+2014-02-07 12:11 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (46508796a129 [tip])
+
+	* .hgtags:
+	Added tag 0.03_03 for changeset c0cd2e7beac1
+
+2014-02-07 12:10 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (c0cd2e7beac1 [0.03_03])
+
+	* Changes, lib/IO/ReStoreFH.pm:
+	update logs and version for release
+
+2014-02-07 12:10 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (7a89dde9ae49)
+
+	* t/breakage.t:
+	test for breakage under 5.10.x missed 5.10.0
+
+2014-02-07 09:24 -0500  djerius  <djerius@cfa.harvard.edu>  (bc497998362d)
+
+	* MANIFEST.SKIP:
+	don't distribute backup files
+
+2014-02-07 09:22 -0500  djerius  <djerius@cfa.harvard.edu>  (f1a12053529f)
 
 	* .hgtags:
 	Added tag 0.03_02 for changeset 580202e787ab
