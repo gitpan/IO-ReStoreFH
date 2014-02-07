@@ -1,4 +1,20 @@
-2014-02-06 17:42 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (0932da3f2b2a [tip])
+2014-02-07 09:22 -0500  djerius  <djerius@cfa.harvard.edu>  (f1a12053529f [tip])
+
+	* .hgtags:
+	Added tag 0.03_02 for changeset 580202e787ab
+
+2014-02-07 09:22 -0500  djerius  <djerius@cfa.harvard.edu>  (580202e787ab [0.03_02])
+
+	* Changes, lib/IO/ReStoreFH.pm:
+	update logs and version for release
+
+2014-02-07 09:22 -0500  djerius  <djerius@cfa.harvard.edu>  (7115059f4abe)
+
+	* t/breakage.t: new file.
+	* t/breakage.t:
+	add test for breakage under 5.10.x
+
+2014-02-06 17:42 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (0932da3f2b2a)
 
 	* .hgtags:
 	Added tag 0.03_01 for changeset d523bb96f2a2
