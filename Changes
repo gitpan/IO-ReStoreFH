@@ -1,5 +1,9 @@
 Revision history for IO-ReStoreFH
 
+0.04	2014-02-09T07:08:02-0500
+
+    * CPAN testers seem happy; promote to stable
+
 0.03_03 2014-02-07T12:09:58-0500
 
   [TEST FIX FIX]

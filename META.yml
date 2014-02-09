@@ -30,4 +30,4 @@ resources:
   bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=IO-ReStoreFH
   license: http://opensource.org/licenses/gpl-3.0.html
   repository: http://bitbucket.org/djerius/io-restorefh
-version: 0.03_03
+version: 0.03_02

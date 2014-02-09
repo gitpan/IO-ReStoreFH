@@ -1,4 +1,14 @@
-2014-02-07 12:11 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (46508796a129 [tip])
+2014-02-09 07:08 -0500  djerius  <djerius@cfa.harvard.edu>  (5ca695dbe236 [tip])
+
+	* .hgtags:
+	Added tag 0.04 for changeset cf4ec9e68704
+
+2014-02-09 07:08 -0500  djerius  <djerius@cfa.harvard.edu>  (cf4ec9e68704 [0.04])
+
+	* Changes, lib/IO/ReStoreFH.pm:
+	update logs and version for release
+
+2014-02-07 12:11 -0500  Diab Jerius  <djerius@cfa.harvard.edu>  (46508796a129)
 
 	* .hgtags:
 	Added tag 0.03_03 for changeset c0cd2e7beac1
