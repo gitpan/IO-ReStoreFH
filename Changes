@@ -1,5 +1,9 @@
 Revision history for IO-ReStoreFH
 
+0.05	2014-02-14T15:58:07-0500
+
+    * fix bad META.yml in CPAN distribution
+
 0.04	2014-02-09T07:08:02-0500
 
     * CPAN testers seem happy; promote to stable
